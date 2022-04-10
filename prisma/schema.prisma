@@ -11,8 +11,9 @@ datasource db {
 }
 
 model Post {
-  question   String   @id
-  answerFile String?
+  id         String   @id @default(cuid())
+  question   String
+  answer     String?
   createdAt  DateTime @default(now()) @map(name: "created_at")
   askerEmail String?
   approved   Boolean  @default(false)
