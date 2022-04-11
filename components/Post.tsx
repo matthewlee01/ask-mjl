@@ -1,5 +1,6 @@
 import React from "react";
 import { parseJSON, format } from 'date-fns'
+import useSWR from 'swr'
 
 export type PostProps = {
   id: string;
@@ -9,6 +10,18 @@ export type PostProps = {
   approved: boolean;
   createdAt: Date;
 };
+
+const fetcher = (arg) => fetch(arg).then(res => res.json())
+
+export function usePost (id) {
+  const { data, error } = useSWR(`/api/post/${id}`, fetcher)
+  if (data) console.log(`recieved data: ${data.answer}`)
+  return {
+    post: data,
+    isLoading: !error && !data,
+    isError: error
+  }
+}
 
 const Answer: React.FC<{ answer: string }> = ({ answer }) => {
   answer = answer ? answer : "<p>this question hasn't been answered yet!</p>"
