@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next'
 import Head from 'next/head'
 import prisma from '../lib/prisma';
 import React from "react"
-import Post, { PostProps, usePost } from '../components/Post';
+import { PostList, PostProps, usePost } from '../components/Post';
 import SearchBar from '../components/SearchBar';
 import Layout from '../components/Layout'
 
@@ -41,11 +41,9 @@ const Home: React.FC<Props> = (props) => {
         <div>
           <SearchBar answerCallback={setAnswer}/>
           <div dangerouslySetInnerHTML={{__html: answer}}></div>
-          {/* {props.feed.map((post) => (
-            <div key={post.question}>
-              <Post post={post} />
-            </div>
-          ))} */}
+        </div>
+        <div>
+          <PostList />
         </div>
       </main>
       <footer>

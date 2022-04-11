@@ -16,5 +16,6 @@ model Post {
   answer     String?
   createdAt  DateTime @default(now()) @map(name: "created_at")
   askerEmail String?
+  operandId  String?
   approved   Boolean  @default(false)
 }
