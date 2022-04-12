@@ -3,11 +3,11 @@ import Head from 'next/head'
 import Link from 'next/link'
 import prisma from '../lib/prisma';
 import React from "react"
-import { PostList, PostProps } from '../components/Post';
+import { PostProps } from '../components/Post';
 import SearchBar from '../components/SearchBar';
 import Layout from '../components/Layout'
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const feed = await prisma.post.findMany({
     where: { approved: true },
   })
