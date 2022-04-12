@@ -1,8 +1,9 @@
-import type { GetServerSideProps, NextPage } from 'next'
+import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
+import Link from 'next/link'
 import prisma from '../lib/prisma';
 import React from "react"
-import { PostList, PostProps, usePost } from '../components/Post';
+import { PostList, PostProps } from '../components/Post';
 import SearchBar from '../components/SearchBar';
 import Layout from '../components/Layout'
 
@@ -25,8 +26,29 @@ type Props = {
   feed: PostProps[]
 }
 
-const Home: React.FC<Props> = (props) => {
-  const [answer, setAnswer] = React.useState();
+const topPost = (operandResponse) => {
+  if (!operandResponse) return
+  console.log(operandResponse)
+  const topPost = operandResponse.groups[operandResponse.atoms[0].groupId];
+  console.log(topPost)
+  const question = topPost.metadata.title;
+  const answer = topPost.metadata.html;
+  const answerHtml = ((answer == question) ?
+    (<div>
+      this question has not been answered yet!
+    </div>) :
+    (<div dangerouslySetInnerHTML={{__html: answer}}></div>)
+  );
+  return (
+    <>
+      <div>{question}</div>
+      {answerHtml}
+    </>
+  )
+}
+
+const Home: React.FC<Props> = () => {
+  const [similarPosts, setSimilarPosts] = React.useState();
   return (
     <Layout>
       <Head>
@@ -39,14 +61,12 @@ const Home: React.FC<Props> = (props) => {
           hey matth!
         </h1>
         <div>
-          <SearchBar answerCallback={setAnswer}/>
-          <div dangerouslySetInnerHTML={{__html: answer}}></div>
-        </div>
-        <div>
-          <PostList />
+          <SearchBar setSimilarPosts={setSimilarPosts}/>
+          {topPost(similarPosts)}
         </div>
       </main>
       <footer>
+        <Link href="/admin">admin</Link>
       </footer>
     </Layout>
   )

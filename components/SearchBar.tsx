@@ -1,29 +1,46 @@
-import { usePost } from "../components/Post";
 import React, { useEffect } from "react";
 
 const updateAnswer = (callback) => {
   callback(document.getElementById("searchbar").innerText);
 };
 
-const submitQuestion = () => {
-  let question: string = document.getElementById("searchbar").innerText;
-  console.log(`submitting ${question}`);
+const submitNewQuestion = (query) => {
+  console.log(`submitting new: ${query}`);
   fetch("/api/post/create", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
-      question: question
+      question: query
     })
-  })
+  });
 }
-const SearchBar: React.FC<{ answerCallback: Function }> = ({
-  answerCallback,
+
+const operandSearch = async (query) => {
+  console.log(`operanding: ${query}`);
+  const data = await (await fetch(`/api/post/search?q=${query}`)).json();
+  console.log('received operand data:');
+  console.log(data);
+  return data;
+}
+
+const SearchBar: React.FC<{ setSimilarPosts : Function }> = ({
+  setSimilarPosts,
 }) => {
-  const [ input, setInput ] = React.useState();
-  const { post } = usePost(encodeURIComponent(input));
-  useEffect(() => {
-    if (post) answerCallback(post.answer)
-  })
+  const [ query, setQuery ] = React.useState("");
+    React.useEffect(() => {
+      let currentQuery = query;
+      if (currentQuery.length == 0) {
+        setSimilarPosts("");
+        return;
+      }
+      const delayed = setTimeout(async () => {
+        const res = await operandSearch(query);
+        if (currentQuery === query) {
+          setSimilarPosts(res);
+        }
+      }, 180);
+      return () => clearTimeout(delayed);
+    }, [query, setSimilarPosts ] );
   return (
     <>
       search v
@@ -31,12 +48,12 @@ const SearchBar: React.FC<{ answerCallback: Function }> = ({
         id="searchbar"
         contentEditable={true}
         onInput={() => {
-          updateAnswer(setInput);
+          updateAnswer(setQuery);
         }}
         onKeyPress={(e) => {
           if (e.key == 'Enter') {
             e.preventDefault();
-            submitQuestion();
+            submitNewQuestion(query);
           }
         }}
       ></div>

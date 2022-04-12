@@ -24,16 +24,6 @@ export function usePosts () {
   }
 }
 
-export function usePost (id) {
-  const { data, error } = useSWR(`/api/post/${id}`, fetcher)
-  if (data) console.log(`recieved data: ${data.answer}`)
-  return {
-    post: data,
-    isLoading: !error && !data,
-    isError: error
-  }
-}
-
 const Answer: React.FC<{ answer: string }> = ({ answer }) => {
   answer = answer ? answer : "<p>this question hasn't been answered yet!</p>"
   return (
@@ -81,20 +71,22 @@ export const PostList: React.FC = () => {
   return (isLoading ?
     (<div>loading...</div>) :
     (<table>
-      <tr>
-        <th>question</th>
-        <th>answer</th>
-        <th>approved?</th>
-        <th>delete!</th>
-      </tr>
-      {posts.list.map((post) => (
-        <tr key={post.question}>
-          <td>{post.question}</td>
-          <td>{post.answer}</td>
-          <td onClick={() => updatePost(post.id, {approved: !post.approved}, mutate)}>{post.approved.toString()}</td>
-          <td onClick={() => deletePost(post.id, mutate)}>delete</td>
+      <tbody>
+        <tr>
+          <th>question</th>
+          <th>answer</th>
+          <th>approved?</th>
+          <th>delete!</th>
         </tr>
-      ))}
+        {posts.list.map((post) => (
+          <tr key={post.question}>
+            <td>{post.question}</td>
+            <td>{post.answer}</td>
+            <td onClick={() => updatePost(post.id, {approved: !post.approved}, mutate)}>{post.approved.toString()}</td>
+            <td onClick={() => deletePost(post.id, mutate)}>delete</td>
+          </tr>
+        ))}
+      </tbody>
     </table>))
 }
 
