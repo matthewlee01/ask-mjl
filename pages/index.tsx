@@ -41,7 +41,7 @@ const topPost = (operandResponse) => {
     (<div>
       this question has not been answered yet!
     </div>) :
-    (<div dangerouslySetInnerHTML={{__html: answer}}></div>)
+    (<div id="answer" dangerouslySetInnerHTML={{__html: answer}}></div>)
   );
   return (
     <>
@@ -70,7 +70,6 @@ const Home: React.FC<Props> = () => {
         </div>
       </main>
       <footer>
-        <Link href="/admin">admin</Link>
       </footer>
     </Layout>
   )

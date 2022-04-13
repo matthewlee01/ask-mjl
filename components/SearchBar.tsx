@@ -4,15 +4,17 @@ const updateAnswer = (callback) => {
   callback(document.getElementById("searchbar").innerText);
 };
 
-const submitNewQuestion = (query) => {
+const submitNewQuestion = async (query) => {
   console.log(`submitting new: ${query}`);
-  fetch("/api/post/create", {
+  document.getElementById("searchbar").innerHTML = "question submitted!"
+  await fetch("/api/post/create", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({
       question: query
     })
   });
+  document.getElementById("searchbar").innerHTML = ""
 }
 
 const operandSearch = async (query) => {

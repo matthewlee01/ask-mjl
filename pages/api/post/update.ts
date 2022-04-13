@@ -16,16 +16,16 @@ export default async function handler(req, res) {
     operand.updateGroup(post.operandId, {
       kind: "html",
       metadata: {
-        html: post.question,
-        title: post.answer ? post.answer : post.question,
+        title: post.question,
+        html: post.answer ? post.answer : post.question,
       },
     });
   } else {
     const group = await operand.createGroup(process.env.OPERAND_COLLECTION_ID, {
       kind: "html",
       metadata: {
-        html: post.question,
-        title: post.answer,
+        title: post.question,
+        html: post.answer,
       },
     });
     await prisma.post.update({

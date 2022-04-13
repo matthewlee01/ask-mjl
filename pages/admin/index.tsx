@@ -138,7 +138,7 @@ const SaveButton: React.FC<{
   (<div>no post selected</div>)
 };
 
-const Admin: React.FC = () => {
+const AdminPanel: React.FC = () => {
   const [activePost, setActivePost] = React.useState<PostProps>(null);
   const { posts, isLoading, mutate } = usePosts();
   const editor: Editor = useEditor({
@@ -170,4 +170,8 @@ const Admin: React.FC = () => {
   );
 };
 
+const Admin: React.FC = () => {
+  const [ sudo, setSudo ] = React.useState();
+  return (<AdminPanel />)
+}
 export default Admin;
