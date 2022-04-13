@@ -9,7 +9,11 @@ import Layout from '../components/Layout'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const feed = await prisma.post.findMany({
-    where: { approved: true },
+    where: {
+      answer: {
+        not: null
+      }
+    },
   })
   feed.map((post) => {
     post.createdAt = JSON.parse(JSON.stringify(post.createdAt))

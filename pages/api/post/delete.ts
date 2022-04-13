@@ -12,6 +12,7 @@ export default async function handler(req, res) {
   if (post) {
     if (post.operandId) {
       await operand.deleteGroup(post.operandId);
+      console.log(`[operand] deleted group: ${post.operandId}`);
     }
     await prisma.post.delete({
       where: {

@@ -7,7 +7,6 @@ export type PostProps = {
   question: string;
   answer: string | null;
   askerEmail: string | null;
-  approved: boolean;
   createdAt: Date;
 };
 
@@ -79,15 +78,8 @@ export const PostList: React.FC<{ posts, mutateCallback, setActivePost }> = ({
         </tr>
         {posts.map((post) => (
           <tr key={post.question}>
-            <td onClick={() => setActivePost(post)}>{post.question}</td>
-            <td>{post.answer}</td>
-            <td
-              onClick={() =>
-                updatePost(post.id, { approved: !post.approved }, mutateCallback)
-              }
-            >
-              {post.approved.toString()}
-            </td>
+            <td>{post.question}</td>
+            <td onClick={() => setActivePost(post)}>{post.answer}</td>
             <td onClick={() => deletePost(post.id, mutateCallback)}>delete</td>
           </tr>
         ))}
