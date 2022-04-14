@@ -1,6 +1,5 @@
 import type { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
 import prisma from '../lib/prisma';
 import React from "react"
 import { PostProps } from '../components/Post';

@@ -1,4 +1,3 @@
-import prisma from 'lib/prisma';
 import operand from 'lib/operand'
 
 export default async function handler(req, res) {
