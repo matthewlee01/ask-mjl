@@ -5,28 +5,29 @@ import React from "react"
 import { PostProps } from '../components/Post';
 import SearchBar from '../components/SearchBar';
 import Layout from '../components/Layout'
+import Spiller from '../components/Spiller'
+import { Trie } from 'mnemonist'
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const feed = await prisma.post.findMany({
+  const posts = await prisma.post.findMany({
     where: {
       answer: {
         not: null
       }
     },
+    select: {
+      question: true
+    }
   })
-  feed.map((post) => {
-    post.createdAt = JSON.parse(JSON.stringify(post.createdAt))
-    return post;
-  });
   return {
     props: {
-      feed
+      questions: posts.map((post) => post.question)
     }
   }
 }
 
 type Props = {
-  feed: PostProps[]
+  questions: string[]
 }
 
 const topPost = (operandResponse) => {
@@ -50,8 +51,9 @@ const topPost = (operandResponse) => {
   )
 }
 
-const Home: React.FC<Props> = () => {
+const Home: React.FC<Props> = (props) => {
   const [similarPosts, setSimilarPosts] = React.useState();
+  const trie = Trie.from(props.questions)
   return (
     <Layout>
       <Head>
@@ -64,7 +66,7 @@ const Home: React.FC<Props> = () => {
           hey matth!
         </h1>
         <div>
-          <SearchBar setSimilarPosts={setSimilarPosts}/>
+          <SearchBar setSimilarPosts={setSimilarPosts} trie={trie} />
           {topPost(similarPosts)}
         </div>
       </main>

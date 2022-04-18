@@ -22,7 +22,7 @@ export function usePosts() {
   };
 }
 
-const Answer: React.FC<{ answer: string }> = ({ answer }) => {
+export const Answer: React.FC<{ answer: string }> = ({ answer }) => {
   answer = answer ? answer : "<p>this question hasn't been answered yet!</p>";
   return <div dangerouslySetInnerHTML={{ __html: answer }} />;
 };
