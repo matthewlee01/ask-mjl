@@ -7,6 +7,7 @@ import SearchBar from '../components/SearchBar';
 import Layout from '../components/Layout'
 import Spiller from '../components/Spiller'
 import { Trie } from 'mnemonist'
+import Hand from 'components/Hand'
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await prisma.post.findMany({
@@ -69,6 +70,7 @@ const Home: React.FC<Props> = (props) => {
           <SearchBar setSimilarPosts={setSimilarPosts} trie={trie} />
           {topPost(similarPosts)}
         </div>
+        <Hand />
       </main>
       <footer>
       </footer>
