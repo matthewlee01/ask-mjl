@@ -144,7 +144,7 @@ const AdminPanel: React.FC = () => {
     editor?.commands.setContent(activePost?.answer)
   }, [activePost, editor])
   return (
-    <Layout>
+    <div>
       <h1>admin</h1>
       <MenuBar editor={editor} />
       <EditorContent editor={editor} />
@@ -161,7 +161,7 @@ const AdminPanel: React.FC = () => {
       <footer>
         <Link href="/">home</Link>
       </footer>
-    </Layout>
+    </div>
   );
 };
 

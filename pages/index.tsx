@@ -1,60 +1,37 @@
-import type { GetServerSideProps } from 'next'
-import Head from 'next/head'
-import prisma from '../lib/prisma';
-import React from "react"
-import { PostProps } from '../components/Post';
-import SearchBar from '../components/SearchBar';
-import Layout from '../components/Layout'
-import Spiller from '../components/Spiller'
-import { Trie } from 'mnemonist'
-import Hand from 'components/Hand'
+import type { GetServerSideProps } from "next";
+import Head from "next/head";
+import prisma from "../lib/prisma";
+import React from "react";
+import { PostProps } from "../components/Post";
+import SearchPanel from "../components/SearchPanel";
+import Layout from "../components/Layout";
+import { Trie } from "mnemonist";
+import Hand from "components/Hand";
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const posts = await prisma.post.findMany({
     where: {
       answer: {
-        not: null
-      }
+        not: null,
+      },
     },
     select: {
-      question: true
-    }
-  })
+      question: true,
+    },
+  });
   return {
     props: {
-      questions: posts.map((post) => post.question)
-    }
-  }
-}
+      questions: posts.map((post) => post.question),
+    },
+  };
+};
 
 type Props = {
-  questions: string[]
-}
-
-const topPost = (operandResponse) => {
-  if (!operandResponse) return
-  console.log(operandResponse)
-  const topPost = operandResponse.groups[operandResponse.atoms[0].groupId];
-  console.log(topPost)
-  const question = topPost.metadata.title;
-  const answer = topPost.metadata.html;
-  const answerHtml = ((answer == question) ?
-    (<div>
-      this question has not been answered yet!
-    </div>) :
-    (<div id="answer" dangerouslySetInnerHTML={{__html: answer}}></div>)
-  );
-  return (
-    <>
-      <div>{question}</div>
-      {answerHtml}
-    </>
-  )
-}
+  questions: string[];
+};
 
 const Home: React.FC<Props> = (props) => {
-  const [similarPosts, setSimilarPosts] = React.useState();
-  const trie = Trie.from(props.questions)
+  const trie = Trie.from(props.questions);
   return (
     <Layout>
       <Head>
@@ -62,20 +39,27 @@ const Home: React.FC<Props> = (props) => {
         <meta name="description" content="matth's personal wiki" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <h1>
-          hey matth!
-        </h1>
-        <div>
-          <SearchBar setSimilarPosts={setSimilarPosts} trie={trie} />
-          {topPost(similarPosts)}
+        <div className="searchPanel">
+          <SearchPanel trie={trie} />
         </div>
-        <Hand />
-      </main>
-      <footer>
-      </footer>
+        <div className="handPanel">
+          <Hand />
+        </div>
+      <footer></footer>
+      <style jsx>{`
+      .searchPanel {
+        width: 70%;
+        height: 100%;
+        padding: 1rem;
+      }
+      
+      .handPanel {
+        height: 100%;
+        width: 30%;
+      }
+      `}</style>
     </Layout>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
