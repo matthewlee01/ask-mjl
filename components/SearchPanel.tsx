@@ -44,6 +44,7 @@ const SearchPanel: React.FC<{
         : trie
             .find(query.trim())
             .slice(0, 8)
+            .sort((x, y) => x.length - y.length)
             .filter((match) => match != query)
     );
   }, [query, trie]);
@@ -57,7 +58,9 @@ const SearchPanel: React.FC<{
       const res = await operandSearch(query);
       if (currentQuery === query) {
         setSimilarPosts(
-          res.filter((post) => !matches.find((match) => match == post.title))
+          res.filter((post) => !matches.find((match) => match == post.title) &&
+                                post.title != query &&
+                                post.title != query + "?")
         );
       }
     }, 180);
