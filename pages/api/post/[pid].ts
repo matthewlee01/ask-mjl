@@ -27,7 +27,6 @@ export default async function handler(req, res) {
         score: group.score,
       }
     })
-    console.log(related);
   }
   res.status(200).json({ post: post, related: related });
 }

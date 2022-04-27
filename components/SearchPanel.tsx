@@ -37,6 +37,7 @@ const SearchPanel: React.FC<{
   const [matches, setMatches] = React.useState<string[]>([]);
   const [matchedPost, setMatchedPost] = React.useState(null);
   const [relatedPosts, setRelatedPosts] = React.useState(null);
+
   useEffect(() => {
     findPost(query, setMatchedPost, setRelatedPosts);
     setMatches(
@@ -48,8 +49,6 @@ const SearchPanel: React.FC<{
             .sort((x, y) => x.length - y.length)
             .filter((match) => match != query)
     );
-  }, [query, trie]);
-  useEffect(() => {
     let currentQuery = query;
     if (currentQuery.length == 0) {
       setSimilarPosts([]);
@@ -58,51 +57,39 @@ const SearchPanel: React.FC<{
     const delayed = setTimeout(async () => {
       const res = await operandSearch(query);
       if (currentQuery === query) {
-        setSimilarPosts(
-          res.filter(
-            (post) =>
-              !matches.find((match) => match == post.title) &&
-              post.title != query &&
-              post.title != query + "?"
-          )
-        );
+        setSimilarPosts(res);
       }
     }, 180);
     return () => clearTimeout(delayed);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query]);
+  }, [query, trie]);
+
+  const PostListItem = (question) => (
+    <div key={question}>
+      <span
+        onClick={() => {
+          setQuery(question);
+          document.getElementById("searchBar").innerHTML = question;
+        }}
+      >
+        {question}
+      </span>
+    </div>
+  );
+
   const MatchList = () => (
     <>
       <div className={"matches post-list"}>
-        {matches.map((match) => (
-          <div
-            key={match}
-            onClick={() => {
-              setQuery(match);
-              document.getElementById("searchBar").innerHTML = match;
-            }}
-          >
-            {match}
-          </div>
-        ))}
+        {matches.map(PostListItem)}
       </div>
       <div className={"similar post-list"}>
-        {similarPosts.map((post) => {
-          return (
-            <div
-              key={post.title}
-              onClick={() => {
-                setQuery(post.title);
-                document.getElementById("searchBar").innerHTML = post.title;
-              }}
-            >
-              {post.title}
-            </div>
-          );
-        })}
+        {similarPosts
+          .filter((post) => !matches.find((match) => match == post.title))
+          .map((post) => PostListItem(post.title))
+        }
       </div>
     </>
   );
+
   const MatchedPostPanel = () => (
     <>
       <div
@@ -110,22 +97,11 @@ const SearchPanel: React.FC<{
         dangerouslySetInnerHTML={{ __html: matchedPost.answer }}
       ></div>
       <div className={"related post-list"}>
-        {relatedPosts.map((post) => {
-          return (
-            <div
-              key={post.title}
-              onClick={() => {
-                setQuery(post.title);
-                document.getElementById("searchBar").innerHTML = post.title;
-              }}
-            >
-              {post.title}
-            </div>
-          );
-        })}
+        {relatedPosts.map((post) => PostListItem(post.title))}
       </div>
     </>
   );
+  
   return (
     <>
       <SearchBar
