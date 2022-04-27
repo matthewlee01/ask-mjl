@@ -5,7 +5,7 @@ body {
   margin: 0;
   background-color: #232323;
   color: #f0e48b;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 a {
@@ -13,8 +13,63 @@ a {
   text-decoration: none;
 }
 
+p {
+  margin: 0.2rem 0rem;
+}
+
+ul {
+  padding: 0rem 0.4rem 0rem 1.2rem;
+  margin: 0.4rem 0rem;
+}
 * {
   box-sizing: border-box;
+}
+
+.post-list:empty {
+  display: none;
+}
+.post-list {
+  padding: 0.4rem;
+  border-radius: 0.2rem;
+  border-left: 0.2rem solid;
+}
+
+#searchBar {
+  padding: 0.4rem;
+  border-radius: 0.2rem;
+  border: 0.2rem solid #fabd2f;
+}
+
+#searchBar:focus-within {
+  outline: 0px solid transparent;
+}
+
+#searchBar:empty {
+  border-color: #cc241d;
+}
+
+.matches {
+  border-color: #d79921;
+}
+
+.similar {
+  border-color: #fe8019;
+}
+
+.matched-query {
+  border-color: #b8bb26 !important;
+}
+
+.found-post {
+  padding: 0.2rem 0.4rem;
+  border-right: 0.2rem solid;
+  border-bottom: 0.2rem solid;
+  border-left: 0.2rem solid;
+  border-color: #8ec07c;
+}
+
+.related {
+  border-color: #83a598;
 }
 
 #__next {

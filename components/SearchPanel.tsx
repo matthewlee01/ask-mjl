@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import { Trie } from "mnemonist";
 import SearchBar from "components/SearchBar";
-import { match } from "assert";
 
 const submitNewQuestion = async (query, setQuery) => {
-  document.getElementById("searchbar").innerHTML = "question submitted!";
+  document.getElementById("searchBar").innerHTML = "question submitted!";
   await fetch("/api/post/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -12,14 +11,15 @@ const submitNewQuestion = async (query, setQuery) => {
       question: query,
     }),
   });
-  document.getElementById("searchbar").innerHTML = "";
+  document.getElementById("searchBar").innerHTML = "";
   setQuery("");
 };
 
-const findPost = async (query, setMatchedPost) => {
+const findPost = async (query, setMatchedPost, setRelatedPosts) => {
   const data = await (await fetch(`/api/post/${query}`)).json();
   if (data.post) {
     setMatchedPost(data.post);
+    setRelatedPosts(data.related);
   } else {
     setMatchedPost(null);
   }
@@ -36,8 +36,9 @@ const SearchPanel: React.FC<{
   const [similarPosts, setSimilarPosts] = React.useState([]);
   const [matches, setMatches] = React.useState<string[]>([]);
   const [matchedPost, setMatchedPost] = React.useState(null);
+  const [relatedPosts, setRelatedPosts] = React.useState(null);
   useEffect(() => {
-    findPost(query, setMatchedPost);
+    findPost(query, setMatchedPost, setRelatedPosts);
     setMatches(
       query == ""
         ? []
@@ -58,63 +59,41 @@ const SearchPanel: React.FC<{
       const res = await operandSearch(query);
       if (currentQuery === query) {
         setSimilarPosts(
-          res.filter((post) => !matches.find((match) => match == post.title) &&
-                                post.title != query &&
-                                post.title != query + "?")
+          res.filter(
+            (post) =>
+              !matches.find((match) => match == post.title) &&
+              post.title != query &&
+              post.title != query + "?"
+          )
         );
       }
     }, 180);
     return () => clearTimeout(delayed);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
   const MatchList = () => (
-    <div id={"autocompletes"}>
-      {matches.map((match) => (
-        <div
-          key={match}
-          onClick={() => {
-            setQuery(match);
-            document.getElementById("searchbar").innerHTML = match;
-          }}
-        >
-          {match}
-        </div>
-      ))}
-      <style jsx>{`
-        #autocompletes {
-          padding: 0.2rem;
-          border-left: 0.2rem solid #fabd2f;
-        }
-
-        #autocompletes:empty {
-          display: none;
-        }
-      `}</style>
-    </div>
-  );
-  const MatchedPostPanel = () => (
-    <div
-      id={"matched-post"}
-      dangerouslySetInnerHTML={{ __html: matchedPost.answer }}
-    ></div>
-  );
-
-  return (
     <>
-      <SearchBar
-        setQuery={setQuery}
-        submitNewQuestion={submitNewQuestion}
-        query={query}
-      />
-      {matchedPost ? <MatchedPostPanel /> : <MatchList />}
-      <div id={"similars"}>
+      <div className={"matches post-list"}>
+        {matches.map((match) => (
+          <div
+            key={match}
+            onClick={() => {
+              setQuery(match);
+              document.getElementById("searchBar").innerHTML = match;
+            }}
+          >
+            {match}
+          </div>
+        ))}
+      </div>
+      <div className={"similar post-list"}>
         {similarPosts.map((post) => {
           return (
             <div
               key={post.title}
               onClick={() => {
                 setQuery(post.title);
-                document.getElementById("searchbar").innerHTML = post.title;
+                document.getElementById("searchBar").innerHTML = post.title;
               }}
             >
               {post.title}
@@ -122,17 +101,40 @@ const SearchPanel: React.FC<{
           );
         })}
       </div>
-      <style jsx>{`
-        #similars {
-          padding: 0.2rem;
-          border-radius: 0.2rem;
-          border-left: 0.2rem solid #fe8019;
-        }
-
-        #similars:empty {
-          display: none;
-        }
-      `}</style>
+    </>
+  );
+  const MatchedPostPanel = () => (
+    <>
+      <div
+        className={"found-post"}
+        dangerouslySetInnerHTML={{ __html: matchedPost.answer }}
+      ></div>
+      <div className={"related post-list"}>
+        {relatedPosts.map((post) => {
+          return (
+            <div
+              key={post.title}
+              onClick={() => {
+                setQuery(post.title);
+                document.getElementById("searchBar").innerHTML = post.title;
+              }}
+            >
+              {post.title}
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+  return (
+    <>
+      <SearchBar
+        setQuery={setQuery}
+        submitNewQuestion={submitNewQuestion}
+        query={query}
+        matchedPost={matchedPost}
+      />
+      {matchedPost ? <MatchedPostPanel /> : <MatchList />}
     </>
   );
 };
