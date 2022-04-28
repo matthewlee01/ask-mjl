@@ -1,11 +1,16 @@
-import React from "react";
+import { ReactElement } from "react";
 
-const SearchBar: React.FC<{
-  setQuery;
-  submitNewQuestion;
-  query;
-  matchedPost;
-}> = ({ setQuery, submitNewQuestion, query, matchedPost }) => {
+const SearchBar = ({
+  setQuery,
+  submitNewQuestion,
+  query,
+  matchedPost,
+}: {
+  setQuery: Function;
+  submitNewQuestion: Function;
+  query: string;
+  matchedPost: Object;
+}): ReactElement => {
   return (
     <div
       id={"searchBar"}

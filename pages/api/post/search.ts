@@ -8,7 +8,11 @@ export default async function handler(req, res) {
     if (!response.find((post) => (post.groupId == atom.groupId))) {
       const post = data.groups[atom.groupId].metadata;
       post.groupId = atom.groupId;
-      response.push(post);
+      response.push({
+        question: post.title,
+        answer: post.html,
+        groupId: post.groupId,
+      });
     }
   })
   res.status(200).json(response)

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useRive, useStateMachineInput } from "rive-react";
+import { useRive, useStateMachineInput, Layout, Fit, Alignment } from "rive-react";
 
 const keyMap = {
   KeyA: "pinky",
@@ -53,6 +53,19 @@ const keyMap = {
   Space: "thumb",
   Backquote: "pinky",
   Backspace: "pinky",
+  Escape: "pinky",
+  ShiftLeft: "pinky",
+  CapsLock: "pinky",
+  AltLeft: "ring",
+  ControlLeft: "pinky",
+  ShiftRight: "pinky",
+  AltRight: "ring",
+  ControlRight: "pinky",
+  Delete: "pinky",
+  ArrowLeft: "index",
+  ArrowRight: "ring",
+  ArrowDown: "middle",
+  ArrowUp: "middle",
 };
 
 const Hand = () => {
@@ -61,6 +74,10 @@ const Hand = () => {
     artboard: "hand",
     autoplay: true,
     stateMachines: "taps",
+    layout: new Layout({
+      fit: Fit.Contain,
+      alignment: Alignment.BottomCenter,
+    })
   });
 
   const thumbPressed = useStateMachineInput(rive, "taps", "thumbPressed");
@@ -91,6 +108,8 @@ const Hand = () => {
       case "pinky":
         if (pinkyPressed) pinkyPressed.value = true;
         break;
+      default:
+        if (thumbPressed) thumbPressed.value = true;
     }
   };
 
@@ -112,6 +131,8 @@ const Hand = () => {
       case "pinky":
         if (pinkyPressed) pinkyPressed.value = false;
         break;
+      default:
+        if (thumbPressed) thumbPressed.value = false;
     }
   };
 

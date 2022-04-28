@@ -20,10 +20,11 @@ export default async function handler(req, res) {
     related = (await operand.related(
       post.operandId,
       [process.env.OPERAND_COLLECTION_ID],
-      5
+      8
     )).groups.map((group) => {
       return {
-        ...group.metadata,
+        question: group.metadata.title,
+        answer: group.metadata.html,
         score: group.score,
       }
     })
