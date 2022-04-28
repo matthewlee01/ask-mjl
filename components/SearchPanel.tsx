@@ -23,6 +23,14 @@ const submitNewQuestion = async (
   setQuery("");
 };
 
+const fetchRelatedPosts = async (
+  operandId: string,
+  setRelatedPosts: Function
+): Promise<void> => {
+  const res = await (await fetch(`/api/post/related?q=${operandId}`)).json();
+  setRelatedPosts(res);
+};
+
 const findPost = async (
   query: string,
   setMatchedPost: Function,
@@ -31,9 +39,10 @@ const findPost = async (
   const data = await (await fetch(`/api/post/${query}`)).json();
   if (data.post) {
     setMatchedPost(data.post);
-    setRelatedPosts(data.related);
+    fetchRelatedPosts(data.post.operandId, setRelatedPosts);
   } else {
     setMatchedPost(null);
+    setRelatedPosts([]);
   }
 };
 
@@ -146,7 +155,7 @@ const SearchPanel = ({ trie }): ReactElement => {
   const [similarPosts, setSimilarPosts] = React.useState([]);
   const [matches, setMatches] = React.useState<string[]>([]);
   const [matchedPost, setMatchedPost] = React.useState(null);
-  const [relatedPosts, setRelatedPosts] = React.useState(null);
+  const [relatedPosts, setRelatedPosts] = React.useState([]);
 
   useEffect(() => {
     findPost(query, setMatchedPost, setRelatedPosts);
