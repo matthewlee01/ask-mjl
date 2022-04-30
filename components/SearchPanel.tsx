@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from "react";
 import { Trie } from "mnemonist";
 import SearchBar from "components/SearchBar";
-import { url } from "inspector";
+import Submit from "components/Submit";
 
 interface Post {
   question: string;
@@ -10,14 +10,15 @@ interface Post {
 
 const submitNewQuestion = async (
   query: string,
+  email: string,
   setQuery: Function
 ): Promise<void> => {
-  document.getElementById("searchBar").innerHTML = "question submitted!";
   await fetch("/api/post/create", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       question: query,
+      email: email,
     }),
   });
   document.getElementById("searchBar").innerHTML = "";
@@ -120,7 +121,7 @@ const MatchedPostPanel = ({
 }): ReactElement => (
   <>
     <div
-      className={"found-post"}
+      className={"found-post content-panel"}
       dangerouslySetInnerHTML={{ __html: matchedPost.answer }}
     ></div>
     <div className={"related post-list"}>
@@ -166,10 +167,11 @@ const MatchList = ({
 
 const SearchPanel = ({ trie }): ReactElement => {
   const [query, setQuery] = React.useState<string>("");
-  const [similarPosts, setSimilarPosts] = React.useState([]);
+  const [similarPosts, setSimilarPosts] = React.useState<Post[]>([]);
   const [matches, setMatches] = React.useState<string[]>([]);
-  const [matchedPost, setMatchedPost] = React.useState(null);
-  const [relatedPosts, setRelatedPosts] = React.useState([]);
+  const [matchedPost, setMatchedPost] = React.useState<Post>(null);
+  const [relatedPosts, setRelatedPosts] = React.useState<Post[]>([]);
+  const [submitting, setSubmitting] = React.useState<boolean>(false);
 
   useEffect(() => {
     const url = new URLSearchParams(window.location.search);
@@ -185,14 +187,19 @@ const SearchPanel = ({ trie }): ReactElement => {
     return operandPing(query, setSimilarPosts);
   }, [query, trie]);
 
+  // match?
   return (
     <>
       <SearchBar
         setQuery={setQuery}
-        submitNewQuestion={submitNewQuestion}
+        submit={() => setSubmitting(true)}
         query={query}
-        matchedPost={matchedPost}
+        contentBelow={(matchedPost || submitting) as boolean}
       />
+      {submitting ? <Submit
+        submitQuestion={(email) => submitNewQuestion(query, email, setQuery)}
+        setSubmitting={setSubmitting}
+      /> : null}
       {matchedPost ? (
         <MatchedPostPanel
           matchedPost={matchedPost}

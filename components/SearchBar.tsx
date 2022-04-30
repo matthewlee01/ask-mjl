@@ -2,27 +2,27 @@ import { ReactElement } from "react";
 
 const SearchBar = ({
   setQuery,
-  submitNewQuestion,
+  submit,
   query,
-  matchedPost,
+  contentBelow,
 }: {
   setQuery: Function;
-  submitNewQuestion: Function;
+  submit: Function;
   query: string;
-  matchedPost: Object;
+  contentBelow: boolean;
 }): ReactElement => {
   return (
     <div
       id={"searchBar"}
-      className={matchedPost ? "matched-query" : ""}
+      className={contentBelow ? "content-below" : ""}
       contentEditable={true}
       onInput={() => {
         setQuery(document.getElementById("searchBar").innerText);
       }}
       onKeyPress={(e) => {
-        if (e.key == "Enter") {
+        if (e.key == "Enter" && !contentBelow) {
           e.preventDefault();
-          submitNewQuestion(query, setQuery);
+          submit();
         }
       }}
     />

@@ -6,12 +6,12 @@ export default async function handler(req, res) {
       operandId,
       [process.env.OPERAND_COLLECTION_ID],
       8
-    )).groups.map((group) => {
+    ))?.groups?.map((group) => {
       return {
         question: group.metadata.title,
         answer: group.metadata.html,
         score: group.score,
       }
     });
-    res.status(200).json(related);
+    res.status(200).json(related ? related : []);
   }
