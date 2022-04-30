@@ -1,6 +1,7 @@
 import React, { ReactElement, useEffect } from "react";
 import { Trie } from "mnemonist";
 import SearchBar from "components/SearchBar";
+import { url } from "inspector";
 
 interface Post {
   question: string;
@@ -31,6 +32,17 @@ const fetchRelatedPosts = async (
   setRelatedPosts(res);
 };
 
+const setURLQuery = (query: string): void => {
+  const urlParams = new URLSearchParams(window.location.search);
+  urlParams.set("query", query);
+  const newUrl =
+    window.location.origin +
+    window.location.pathname +
+    "?" +
+    urlParams.toString();
+  window.history.replaceState({ path: newUrl }, "", newUrl);
+};
+
 const findPost = async (
   query: string,
   setMatchedPost: Function,
@@ -39,7 +51,9 @@ const findPost = async (
   const data = await (await fetch(`/api/post/${query}`)).json();
   if (data.post) {
     setMatchedPost(data.post);
+    setRelatedPosts([]);
     fetchRelatedPosts(data.post.operandId, setRelatedPosts);
+    setURLQuery(query);
   } else {
     setMatchedPost(null);
     setRelatedPosts([]);
@@ -158,7 +172,15 @@ const SearchPanel = ({ trie }): ReactElement => {
   const [relatedPosts, setRelatedPosts] = React.useState([]);
 
   useEffect(() => {
-    findPost(query, setMatchedPost, setRelatedPosts);
+    const url = new URLSearchParams(window.location.search);
+    const urlQuery = url.get("query");
+    if (urlQuery) {
+      setQuery(urlQuery);
+      document.getElementById("searchBar").innerText = urlQuery;
+    }
+  }, []);
+  useEffect(() => {
+    if (query != "") findPost(query, setMatchedPost, setRelatedPosts);
     setMatches(searchTrie(query, trie));
     return operandPing(query, setSimilarPosts);
   }, [query, trie]);

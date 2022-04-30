@@ -73,7 +73,6 @@ export const PostList: React.FC<{ posts, mutateCallback, setActivePost }> = ({
         <tr>
           <th>question</th>
           <th>answer</th>
-          <th>approved?</th>
           <th>delete!</th>
         </tr>
         {posts.map((post) => (
@@ -84,6 +83,16 @@ export const PostList: React.FC<{ posts, mutateCallback, setActivePost }> = ({
           </tr>
         ))}
       </tbody>
+      <style jsx>{`
+        * {
+          margin: 0.2rem;
+          padding: 0.2rem;
+        }
+        td {
+          vertical-align: top;
+          background-color: #32302f;
+        }
+      `}</style>
     </table>
   );
 };

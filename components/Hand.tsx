@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { useRive, useStateMachineInput, Layout, Fit, Alignment } from "rive-react";
+import {
+  useRive,
+  useStateMachineInput,
+  Layout,
+  Fit,
+  Alignment,
+} from "rive-react";
 
 const keyMap = {
   KeyA: "pinky",
@@ -77,7 +83,7 @@ const Hand = () => {
     layout: new Layout({
       fit: Fit.Contain,
       alignment: Alignment.BottomCenter,
-    })
+    }),
   });
 
   const thumbPressed = useStateMachineInput(rive, "taps", "thumbPressed");
@@ -87,10 +93,13 @@ const Hand = () => {
   const pinkyPressed = useStateMachineInput(rive, "taps", "pinkyPressed");
 
   useEffect(() => {
-    document.body.addEventListener("keydown", onPress);
-    document.body.addEventListener("keyup", onRelease);
+    document.body.addEventListener("keydown", onKeyPress);
+    document.body.addEventListener("keyup", onKeyRelease);
+    document.body.addEventListener("mousedown", onMouseDown);
+    document.body.addEventListener("mouseup", onMouseUp);
   });
-  const onPress = (event: KeyboardEvent) => {
+
+  const onKeyPress = (event: KeyboardEvent) => {
     const finger = keyMap[event.code];
     switch (finger) {
       case "thumb":
@@ -113,7 +122,7 @@ const Hand = () => {
     }
   };
 
-  const onRelease = (event: KeyboardEvent) => {
+  const onKeyRelease = (event: KeyboardEvent) => {
     const finger = keyMap[event.code];
     switch (finger) {
       case "thumb":
@@ -135,7 +144,12 @@ const Hand = () => {
         if (thumbPressed) thumbPressed.value = false;
     }
   };
-
+  const onMouseDown = () => {
+    if (indexPressed) indexPressed.value = true;
+  };
+  const onMouseUp = () => {
+    if (indexPressed) indexPressed.value = false;
+  };
   return <RiveComponent />;
 };
 

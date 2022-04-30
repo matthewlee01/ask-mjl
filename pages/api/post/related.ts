@@ -1,6 +1,5 @@
 import operand from 'lib/operand';
 
-
 export default async function handler(req, res) {
   const { q: operandId } = req.query
   const related = (await operand.related(
@@ -14,5 +13,5 @@ export default async function handler(req, res) {
         score: group.score,
       }
     });
-    res.status(200).json(related)
+    res.status(200).json(related);
   }
