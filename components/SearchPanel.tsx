@@ -21,7 +21,6 @@ const submitNewQuestion = async (
       email: email,
     }),
   });
-  document.getElementById("searchBar").innerHTML = "";
   setQuery("");
 };
 
@@ -66,7 +65,7 @@ const operandPing = (
   setSimilarPosts: Function
 ): (() => void) => {
   let currentQuery = query;
-  if (currentQuery.length == 0) {
+  if (!currentQuery) {
     setSimilarPosts([]);
     return;
   }
@@ -80,7 +79,7 @@ const operandPing = (
 };
 
 const searchTrie = (query: string, trie: Trie<string>): string[] => {
-  if (query == "") {
+  if (!query || query == "") {
     return [];
   } else {
     return trie
@@ -98,12 +97,12 @@ const PostListItem = ({
   question: string;
   callback: Function;
 }): ReactElement => (
-  <div>
+  <div className="post-list-item">
     <span
       onClick={() => {
         callback(question);
-        document.getElementById("searchBar").innerHTML = question;
       }}
+      className="clickable"
     >
       {question}
     </span>
@@ -166,7 +165,7 @@ const MatchList = ({
 );
 
 const SearchPanel = ({ trie }): ReactElement => {
-  const [query, setQuery] = React.useState<string>("");
+  const [query, setQuery] = React.useState<string>();
   const [similarPosts, setSimilarPosts] = React.useState<Post[]>([]);
   const [matches, setMatches] = React.useState<string[]>([]);
   const [matchedPost, setMatchedPost] = React.useState<Post>(null);
@@ -174,20 +173,18 @@ const SearchPanel = ({ trie }): ReactElement => {
   const [submitting, setSubmitting] = React.useState<boolean>(false);
 
   useEffect(() => {
+    if (query != undefined) findPost(query, setMatchedPost, setRelatedPosts);
+    setMatches(searchTrie(query, trie));
+    return operandPing(query, setSimilarPosts);
+  }, [query, trie]);
+  useEffect(() => {
     const url = new URLSearchParams(window.location.search);
     const urlQuery = url.get("query");
     if (urlQuery) {
       setQuery(urlQuery);
-      document.getElementById("searchBar").innerText = urlQuery;
     }
   }, []);
-  useEffect(() => {
-    if (query != "") findPost(query, setMatchedPost, setRelatedPosts);
-    setMatches(searchTrie(query, trie));
-    return operandPing(query, setSimilarPosts);
-  }, [query, trie]);
 
-  // match?
   return (
     <>
       <SearchBar

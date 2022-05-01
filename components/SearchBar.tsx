@@ -12,12 +12,13 @@ const SearchBar = ({
   contentBelow: boolean;
 }): ReactElement => {
   return (
-    <div
-      id={"searchBar"}
-      className={contentBelow ? "content-below" : ""}
-      contentEditable={true}
-      onInput={() => {
-        setQuery(document.getElementById("searchBar").innerText);
+    <input
+      className={"search-bar" + (contentBelow ? " content-below" : "")}
+      value={query ??= ""}
+      placeholder={" "}
+      onChange={(event) => {
+        console.log(event.target.value)
+        setQuery(event.target.value);
       }}
       onKeyPress={(e) => {
         if (e.key == "Enter" && !contentBelow) {
