@@ -21,7 +21,7 @@ const SearchBar = ({
           "traversable search-bar" + (contentBelow ? " content-below" : "")
         }
         value={(query ??= "")}
-        placeholder={" "}
+        placeholder={"ask matthew anything..."}
         onChange={(event) => {
           setQuery(event.target.value);
         }}

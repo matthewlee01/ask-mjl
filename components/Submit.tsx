@@ -53,8 +53,12 @@ const Submit = ({
           displayThankYou(setThanks, setSubmitting);
         }}
       >
-        submit
+        submit!
       </button>
+      <button className="cancel-button" onClick={() => setSubmitting(false)}>
+        cancel!
+      </button>
+
     </div>
   );
 };

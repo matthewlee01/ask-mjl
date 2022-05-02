@@ -8,6 +8,15 @@ interface Post {
   answer: string;
 }
 
+const DEFAULT_SUGGESTIONS: string[] = [
+  null,
+  "what is this website?",
+  "who are you?",
+  "where do you work?",
+  "what are some of your favourite movies?",
+  "when is your birthday?",
+]
+
 const submitNewQuestion = async (
   query: string,
   email: string,
@@ -82,7 +91,7 @@ const operandPing = (
 
 const searchTrie = (query: string, trie: Trie<string>): string[] => {
   if (!query || query == "") {
-    return [];
+    return DEFAULT_SUGGESTIONS;
   } else {
     return trie
       .find(query.trim())

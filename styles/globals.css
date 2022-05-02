@@ -132,6 +132,25 @@ input {
   border-color: #d3869b;
 }
 
+.submit-button {
+  border-color:#8f3f71;
+  color: #8f3f71;
+}
+
+.submit-button:hover, .submit-button:focus {
+  background-color: #8f3f71;
+}
+
+.cancel-button {
+  margin-left: 0.6rem;
+  color: #9d0006;
+  border-color: #9d0006;
+}
+
+.cancel-button:hover, .cancel-button:focus {
+  background-color: #9d0006;
+}
+
 .related {
   border-color: #83a598;
   border-bottom-left-radius: 0.2rem;

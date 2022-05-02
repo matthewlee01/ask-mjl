@@ -34,7 +34,7 @@ const Home: React.FC<Props> = (props) => {
   return (
     <Layout>
       <Head>
-        <title>hey matth!</title>
+        <title>ask matthew anything!</title>
         <meta name="description" content="matth's personal wiki" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
