@@ -8,18 +8,11 @@ export default async function handler(req, res) {
   const { pid } = req.query;
   var post = await prisma.post.findFirst({
     where: {
-      OR: [
-        {
-          question: pid,
-        },
-        {
-          question: pid + "?",
-        },
-      ],
+      question: pid,
     },
   });
   if (post && (post.answer == null || post.answer == "")) {
-    post.answer = unansweredResponse; 
+    post.answer = unansweredResponse;
   }
   res.status(200).json({ post: post });
 }

@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useRef } from "react";
 import { Trie } from "mnemonist";
 import SearchBar from "components/SearchBar";
 import Submit from "components/Submit";
@@ -48,7 +48,9 @@ const findPost = async (
   setMatchedPost: Function,
   setRelatedPosts: Function
 ): Promise<void> => {
-  const data = await (await fetch(`/api/post/${query}`)).json();
+  const data = await (
+    await fetch(`/api/post/${encodeURIComponent(query)}`)
+  ).json();
   if (data.post) {
     setMatchedPost(data.post);
     setRelatedPosts([]);
@@ -96,18 +98,22 @@ const PostListItem = ({
 }: {
   question: string;
   callback: Function;
-}): ReactElement => (
-  <div className="post-list-item">
-    <span
+}): ReactElement => {
+  return (
+    <div
+      className="clickable post-list-item"
+      tabIndex={0}
+      onKeyDown={(event) => {
+        if (event.key == "Enter") callback(question);
+      }}
       onClick={() => {
         callback(question);
       }}
-      className="clickable"
     >
       {question}
-    </span>
-  </div>
-);
+    </div>
+  );
+};
 
 const MatchedPostPanel = ({
   matchedPost,
@@ -146,7 +152,7 @@ const MatchList = ({
 }): ReactElement => (
   <>
     <div className={"matches post-list"}>
-      {matches.map((match) => (
+      {matches.slice(1).map((match) => (
         <PostListItem key={match} question={match} callback={setQuery} />
       ))}
     </div>
@@ -174,6 +180,7 @@ const SearchPanel = ({ trie }): ReactElement => {
 
   useEffect(() => {
     if (query != undefined) findPost(query, setMatchedPost, setRelatedPosts);
+    if (query == "") setSubmitting(false);
     setMatches(searchTrie(query, trie));
     return operandPing(query, setSimilarPosts);
   }, [query, trie]);
@@ -184,6 +191,9 @@ const SearchPanel = ({ trie }): ReactElement => {
       setQuery(urlQuery);
     }
   }, []);
+  useEffect(() => {
+    if (matchedPost) setSubmitting(false);
+  }, [matchedPost])
 
   return (
     <>
@@ -192,11 +202,14 @@ const SearchPanel = ({ trie }): ReactElement => {
         submit={() => setSubmitting(true)}
         query={query}
         contentBelow={(matchedPost || submitting) as boolean}
+        autocomplete={matches[0]}
       />
-      {submitting ? <Submit
-        submitQuestion={(email) => submitNewQuestion(query, email, setQuery)}
-        setSubmitting={setSubmitting}
-      /> : null}
+      {submitting ? (
+        <Submit
+          submitQuestion={(email) => submitNewQuestion(query, email, setQuery)}
+          setSubmitting={setSubmitting}
+        />
+      ) : null}
       {matchedPost ? (
         <MatchedPostPanel
           matchedPost={matchedPost}

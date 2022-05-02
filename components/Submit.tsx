@@ -26,19 +26,21 @@ const Submit = ({
   ) : (
     <div className="submit content-panel">
       <p>new questions submission:</p>
+      <br/>
       <p>
         before you submit a new question, take a look at the suggested posts
         below to make sure the info is not already here!
       </p>
+      <br/>
       <p>
         if you want to, you can also submit your email - it will let me notify
         you when your question is answered, as well as put you on my mailing list (i
         promise not to spam you!)
       </p>
-      <label>email: </label>
       <input
         className="email-submit"
         contentEditable={true}
+        placeholder={"email"}
         value={email}
         type={"email"}
         onChange={(e) => setEmail(e.target.value)}

@@ -17,7 +17,7 @@ a {
   border-radius: 0.2rem;
 }
 
-a:hover {
+a:hover, a:focus {
   color: #075678;
   background-color: #32302f;
 }
@@ -41,7 +41,7 @@ button {
   padding: 0.4rem;
 }
 
-button:hover {
+button:hover, button:focus {
   color: #1d2021;
   background-color: #83c07c;
   cursor: pointer;
@@ -63,9 +63,15 @@ input {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
+  height: fit-content;
 }
 
-input:focus-within {
+::selection {
+  color: #8ec07c;
+  background-color: #504945;
+}
+
+*:focus-within {
   outline: 0px solid transparent;
 }
 
@@ -77,12 +83,15 @@ input:focus-within {
   display: none;
 }
 .post-list {
-  padding: 0.4rem;
+  padding: 0rem;
   border-left: 0.2rem solid;
 }
 
 .search-bar {
   padding: 0.4rem;
+  position: relative;
+  z-index: 10;
+  background-color: transparent;
   border-bottom-left-radius: 0rem;
   border: 0.2rem solid #fabd2f;
   width: 100%;
@@ -129,11 +138,38 @@ input:focus-within {
 }
 
 .post-list-item {
-  padding: 0.2rem 0rem;
+  padding: 0.4rem;
+  width: fit-content;
+}
+
+.post-list-item:focus, .post-list-item:hover {
+  color: #8ec07c;
+  background-color: #504945;
 }
 
 .clickable:hover {
   cursor: pointer;
+}
+
+.autocomplete {
+  top: 0rem;
+  left: 0rem;
+  padding: 0.6rem 0.6rem;
+  position: fixed;
+  color: #b57614;
+}
+
+.search-container {
+  position: fixed;
+  top: 0rem;
+  left: 0rem;
+  width: 70%;
+  background-color: #282828;
+}
+
+.enter-icon {
+  color: #8ec07c;
+  font-size: 80%;
 }
 
 #__next {

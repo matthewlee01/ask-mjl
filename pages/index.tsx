@@ -2,7 +2,6 @@ import type { GetServerSideProps } from "next";
 import Head from "next/head";
 import prisma from "../lib/prisma";
 import React from "react";
-import { PostProps } from "../components/Post";
 import SearchPanel from "../components/SearchPanel";
 import Layout from "../components/Layout";
 import { Trie } from "mnemonist";
@@ -50,7 +49,7 @@ const Home: React.FC<Props> = (props) => {
       .searchPanel {
         width: 70%;
         height: 100%;
-        padding: 1rem;
+        padding-top: 2.4rem;
       }
       
       .handPanel {
