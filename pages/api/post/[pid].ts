@@ -2,7 +2,7 @@ import prisma from "../../../lib/prisma";
 
 const unansweredResponse: string =
   "<p>this question has already been asked!</p>" +
-  "<p>check back later to see if it's been answered : )";
+  "<p>check back later to see if it's been answered : )</p>";
 
 export default async function handler(req, res) {
   const { pid } = req.query;

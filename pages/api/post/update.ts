@@ -13,27 +13,32 @@ export default async function handler(req, res) {
   });
   if (post.operandId) {
     console.log(`[operand] updating group: ${post.operandId}`);
-    operand.updateGroup(post.operandId, {
-      kind: "html",
-      metadata: {
+    operand.updateGroup(
+      post.operandId,
+      "html",
+      {
         title: post.question,
         html: post.answer ? post.answer : post.question,
       },
-    });
+
+      {}
+    );
   } else {
-    const group = await operand.createGroup(process.env.OPERAND_COLLECTION_ID, {
-      kind: "html",
-      metadata: {
+    const group = await operand.createGroup(
+      process.env.OPERAND_COLLECTION_ID,
+      "html",
+      {
         title: post.question,
         html: post.answer,
       },
-    });
+      {}
+    );
     await prisma.post.update({
       where: {
         id: id,
       },
       data: {
-        operandId: group.id
+        operandId: group.id,
       },
     });
     console.log(`[operand] created group: ${group.id}`);
