@@ -1,5 +1,5 @@
-import prisma from '../../../lib/prisma';
-import operand from 'lib/operand';
+import prisma from "../../../lib/prisma";
+import operand from "lib/operand";
 
 export default async function handler(req, res) {
   var posts = await prisma.post.findMany();
@@ -22,8 +22,10 @@ export default async function handler(req, res) {
           operandId: group.id,
         },
       });
+
       console.log(`[operand] created group: ${group.id}`);
     }
-  })
-  res.status(200).json({ list: posts })
+    console.log(`[posts] serving all ${posts.length} items`);
+  });
+  res.status(200).json({ list: posts });
 }
