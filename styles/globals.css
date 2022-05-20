@@ -1,7 +1,7 @@
 html,
 body {
   height: 100vh;
-  padding: 0rem;
+  padding: 0.1rem 0rem;
   margin: 0;
   background-color: #282828;
   color: #f0e48b;
@@ -78,6 +78,7 @@ input {
 * {
   box-sizing: border-box;
   font-weight: 200;
+  font-size: 1.05rem;
 }
 
 .post-list:empty {
