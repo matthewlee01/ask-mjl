@@ -6,24 +6,32 @@ import StarterKit from "@tiptap/starter-kit";
 import HyperLink from "@tiptap/extension-link";
 import EditorMenu from "components/admin/EditorMenu";
 
+export async function getServerSideProps(context) {
+  return {
+    props: {apiKey: process.env.API_KEY}, 
+  }
+}
+
 const SaveButton: React.FC<{
   post: PostProps;
   editor: Editor;
+  apiKey: string;
   mutateCallback: Function;
-}> = ({ post, editor, mutateCallback }) => {
+}> = ({ post, editor, apiKey, mutateCallback }) => {
   return post ? (
     <div
       onClick={() =>
-        updatePost(post.id, { answer: editor.getHTML() }, mutateCallback)
+        updatePost(post.id, { answer: editor.getHTML() }, apiKey, mutateCallback)
       }
     >
-      save!
+      save! {post.question}
     </div>
   ) : (
     <div>no post selected</div>
   );
 };
-const AdminPanel: React.FC = () => {
+
+const Admin: React.FC<{ apiKey: string }> = ({ apiKey }) => {
   const [activePost, setActivePost] = React.useState<PostProps>(null);
   const { posts, isLoading, mutate } = usePosts();
   const editor: Editor = useEditor({
@@ -64,11 +72,12 @@ const AdminPanel: React.FC = () => {
       <h1>admin</h1>
       <EditorMenu editor={editor} setLink={setLink} />
       <EditorContent editor={editor} />
-      <SaveButton post={activePost} editor={editor} mutateCallback={mutate} />
+      <SaveButton post={activePost} editor={editor} apiKey={apiKey} mutateCallback={mutate} />
       <PostList
         setActivePost={setActivePost}
         posts={isLoading ? [] : posts.list}
         mutateCallback={mutate}
+        apiKey={apiKey}
       />
       <footer>
         <Link href="/">home</Link>
@@ -77,7 +86,4 @@ const AdminPanel: React.FC = () => {
   );
 };
 
-const Admin: React.FC = () => {
-  return <AdminPanel />;
-};
 export default Admin;

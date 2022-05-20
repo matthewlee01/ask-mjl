@@ -1,6 +1,6 @@
 import React from "react";
 import { parseJSON, format } from "date-fns";
-import useSWR, { mutate } from "swr";
+import useSWR from "swr";
 
 export type PostProps = {
   id: string;
@@ -37,11 +37,14 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   );
 };
 
-export const deletePost = async (id, refreshCallback) => {
+export const deletePost = async (id, apiKey, refreshCallback) => {
   console.log(`deleting ${id}`);
   await fetch("/api/post/delete", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Apikey ${apiKey}`,
+    },
     body: JSON.stringify({
       id: id,
     }),
@@ -49,11 +52,14 @@ export const deletePost = async (id, refreshCallback) => {
   await refreshCallback();
 };
 
-export const updatePost = async (id, data, refreshCallback) => {
+export const updatePost = async (id, data, apiKey, refreshCallback) => {
   console.log(`updating ${id}`);
   await fetch("/api/post/update", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Apikey ${apiKey}`,
+    },
     body: JSON.stringify({
       id: id,
       data: data,
@@ -62,10 +68,11 @@ export const updatePost = async (id, data, refreshCallback) => {
   await refreshCallback();
 };
 
-export const PostList: React.FC<{ posts, mutateCallback, setActivePost }> = ({
+export const PostList: React.FC<{ posts; mutateCallback; setActivePost; apiKey }> = ({
   posts,
   mutateCallback,
   setActivePost,
+  apiKey
 }) => {
   return (
     <table>
@@ -79,7 +86,7 @@ export const PostList: React.FC<{ posts, mutateCallback, setActivePost }> = ({
           <tr key={post.question}>
             <td>{post.question}</td>
             <td onClick={() => setActivePost(post)}>{post.answer}</td>
-            <td onClick={() => deletePost(post.id, mutateCallback)}>delete</td>
+            <td onClick={() => deletePost(post.id, apiKey, mutateCallback)}>delete</td>
           </tr>
         ))}
       </tbody>
