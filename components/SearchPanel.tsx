@@ -1,7 +1,8 @@
-import React, { ReactElement, useEffect, useRef } from "react";
+import React, { ReactElement, useEffect } from "react";
 import { Trie } from "mnemonist";
 import SearchBar from "components/SearchBar";
 import Submit from "components/Submit";
+import { NextRouter, useRouter } from 'next/router'
 
 interface Post {
   question: string;
@@ -41,19 +42,15 @@ const fetchRelatedPosts = async (
   setRelatedPosts(res);
 };
 
-const setURLQuery = (query: string): void => {
-  const urlParams = new URLSearchParams(window.location.search);
-  urlParams.set("query", query);
-  const newUrl =
-    window.location.origin +
-    window.location.pathname +
-    "?" +
-    urlParams.toString();
-  window.history.replaceState({ path: newUrl }, "", newUrl);
+const setURLQuery = (query: string, router: NextRouter): void => {
+  if (router.query.q != query) {
+    router.push(`/?q=${query}`);
+  }
 };
 
 const findPost = async (
   query: string,
+  router: NextRouter,
   setMatchedPost: Function,
   setRelatedPosts: Function
 ): Promise<void> => {
@@ -61,10 +58,10 @@ const findPost = async (
     await fetch(`/api/post/${encodeURIComponent(query)}`)
   ).json();
   if (data.post) {
+    setURLQuery(query, router);
     setMatchedPost(data.post);
     setRelatedPosts([]);
     fetchRelatedPosts(query, setRelatedPosts);
-    setURLQuery(query);
   } else {
     setMatchedPost(null);
     setRelatedPosts([]);
@@ -186,16 +183,26 @@ const SearchPanel = ({ trie }): ReactElement => {
   const [matchedPost, setMatchedPost] = React.useState<Post>(null);
   const [relatedPosts, setRelatedPosts] = React.useState<Post[]>([]);
   const [submitting, setSubmitting] = React.useState<boolean>(false);
+  const router = useRouter();
 
   useEffect(() => {
-    if (query != undefined) findPost(query, setMatchedPost, setRelatedPosts);
+    const handleRouteChange = (url, { shallow }) => {
+      setQuery(decodeURIComponent(url.slice(4)))
+    }
+    router.events.on('routeChangeStart', handleRouteChange)
+    return () => {
+      router.events.off('routeChangeStart', handleRouteChange)
+    }
+  })
+  useEffect(() => {
+    if (query != undefined) findPost(query, router, setMatchedPost, setRelatedPosts);
     if (query == "") setSubmitting(false);
     setMatches(searchTrie(query, trie));
     return operandPing(query, setSimilarPosts);
-  }, [query, trie]);
+  }, [query, router, trie]);
   useEffect(() => {
     const url = new URLSearchParams(window.location.search);
-    const urlQuery = url.get("query");
+    const urlQuery = url.get("q");
     if (urlQuery) {
       setQuery(urlQuery);
     }
