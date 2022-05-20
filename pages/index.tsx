@@ -49,7 +49,7 @@ const Home: React.FC<Props> = (props) => {
       .searchPanel {
         width: 70%;
         height: 100%;
-        padding-top: 2.4rem;
+        padding-top: 2.28rem;
       }
       
       .handPanel {

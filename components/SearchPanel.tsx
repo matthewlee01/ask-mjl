@@ -35,10 +35,10 @@ const submitNewQuestion = async (
 };
 
 const fetchRelatedPosts = async (
-  query: string,
+  operandId: string,
   setRelatedPosts: Function
 ): Promise<void> => {
-  const res = await (await fetch(`/api/post/related?q=${query}`)).json();
+  const res = await (await fetch(`/api/post/related?q=${operandId}`)).json();
   setRelatedPosts(res);
 };
 
@@ -61,7 +61,7 @@ const findPost = async (
     setURLQuery(query, router);
     setMatchedPost(data.post);
     setRelatedPosts([]);
-    fetchRelatedPosts(query, setRelatedPosts);
+    fetchRelatedPosts(data.post.operandId, setRelatedPosts);
   } else {
     setMatchedPost(null);
     setRelatedPosts([]);
