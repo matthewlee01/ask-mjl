@@ -53,7 +53,7 @@ const Home: React.FC<Props> = (props) => {
         }
 
         .handPanel {
-          height: 70%;
+          height: 75%;
           width: 30%;
         }
       `}</style>
