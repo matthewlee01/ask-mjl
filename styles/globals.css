@@ -1,7 +1,7 @@
 html,
 body {
   height: 100vh;
-  padding: 0.1rem 0rem;
+  padding: 0rem 0rem;
   margin: 0;
   background-color: #282828;
   color: #f0e48b;
@@ -101,7 +101,6 @@ input {
 
 .search-bar:placeholder-shown {
   border-color: #cc241d;
-  border-radius: 0.2rem;
 }
 
 .matches {
@@ -173,7 +172,7 @@ input {
 }
 
 .autocomplete {
-  top: 0rem;
+  top: 0.1rem;
   left: 0rem;
   padding: 0.6rem 0.6rem;
   position: fixed;
@@ -183,7 +182,7 @@ input {
 
 .search-container {
   position: fixed;
-  top: 0rem;
+  top: 0.1rem;
   left: 0rem;
   width: 70%;
   background-color: #282828;

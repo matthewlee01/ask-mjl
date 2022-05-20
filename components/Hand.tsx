@@ -81,8 +81,8 @@ const Hand = () => {
     autoplay: true,
     stateMachines: "taps",
     layout: new Layout({
-      fit: Fit.Contain,
-      alignment: Alignment.BottomCenter,
+      fit: Fit.FitWidth,
+      alignment: Alignment.TopCenter,
     }),
   });
 
@@ -97,10 +97,13 @@ const Hand = () => {
     document.body.addEventListener("keyup", onKeyRelease);
     document.body.addEventListener("mousedown", onMouseDown);
     document.body.addEventListener("mouseup", onMouseUp);
+    document.body.addEventListener("touchstart", onKeyPress);
+    document.body.addEventListener("touchend", onKeyRelease);
+    document.body.addEventListener("touchcancel", onKeyRelease);
   });
 
   const onKeyPress = (event: KeyboardEvent) => {
-    const finger = keyMap[event.code];
+    const finger = keyMap[event?.code];
     switch (finger) {
       case "thumb":
         if (thumbPressed) thumbPressed.value = true;

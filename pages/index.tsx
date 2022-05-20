@@ -38,24 +38,24 @@ const Home: React.FC<Props> = (props) => {
         <meta name="description" content="matth's personal wiki" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-        <div className="searchPanel">
-          <SearchPanel trie={trie} />
-        </div>
-        <div className="handPanel">
-          <Hand />
-        </div>
+      <div className="searchPanel">
+        <SearchPanel trie={trie} />
+      </div>
+      <div className="handPanel">
+        <Hand />
+      </div>
       <footer></footer>
       <style jsx>{`
-      .searchPanel {
-        width: 70%;
-        height: 100%;
-        padding-top: 2.28rem;
-      }
-      
-      .handPanel {
-        height: 100%;
-        width: 30%;
-      }
+        .searchPanel {
+          width: 70%;
+          height: 100%;
+          padding-top: 2.5rem;
+        }
+
+        .handPanel {
+          height: 70%;
+          width: 30%;
+        }
       `}</style>
     </Layout>
   );

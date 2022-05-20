@@ -12,6 +12,7 @@ const Layout: React.FC<Props> = (props) => (
         display: flex;
         flex-flow: row wrap;
         width: 100%;
+        align-items: flex-end;
       }
     `}</style>
   </div>
