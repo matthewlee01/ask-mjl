@@ -1,5 +1,20 @@
-import { setQuarter } from "date-fns";
 import { ReactElement } from "react";
+
+const Typeahead = ({
+  queryLength,
+  autocomplete,
+}: {
+  queryLength: number;
+  autocomplete: string;
+}): ReactElement => {
+  return autocomplete ? (
+    <div className={"typeahead"}>
+      <span className="hidden">{autocomplete.slice(0, queryLength)}</span>
+      <span>{autocomplete.slice(queryLength)}</span>
+      <span className={"enter-icon"}> ↵</span>
+    </div>
+  ) : null;
+};
 
 const SearchBar = ({
   setQuery,
@@ -36,15 +51,7 @@ const SearchBar = ({
           }
         }}
       />
-      <div className={"autocomplete"}>
-        {(autocomplete ??= "")}
-        {autocomplete ? (
-          <span className={"enter-icon"}>
-            {" "}
-            ↵
-          </span>
-        ) : null}
-      </div>
+      <Typeahead queryLength={query.length} autocomplete={autocomplete} />
     </div>
   );
 };

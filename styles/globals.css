@@ -1,7 +1,7 @@
 html,
 body {
   position: relative;
-  overflow: hidden;
+  overflow: auto;
   height: 100vh;
   padding: 0rem 0rem;
   margin: 0;
@@ -30,7 +30,6 @@ a:visited {
 }
 
 span {
-  padding: 0.1rem;
 }
 
 button {
@@ -173,13 +172,17 @@ input {
   cursor: pointer;
 }
 
-.autocomplete {
-  top: 0.1rem;
+.typeahead {
+  top: 0.02rem;
   left: 0rem;
   padding: 0.6rem 0.6rem;
-  position: fixed;
+  position: absolute;
   font-weight: 200;
   color: #b57614;
+  white-space: nowrap;
+  width: 96%;
+  text-overflow: clip;
+  overflow: hidden;
 }
 
 .search-container {
@@ -188,11 +191,16 @@ input {
   left: 0rem;
   width: 70%;
   background-color: #282828;
+  overflow: hidden;
 }
 
 .enter-icon {
   color: #8ec07c;
   font-size: 80%;
+}
+
+.hidden {
+  color: transparent;
 }
 
 #__next {
