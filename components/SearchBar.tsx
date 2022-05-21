@@ -1,16 +1,16 @@
 import { ReactElement } from "react";
 
 const Typeahead = ({
-  queryLength,
+  query,
   autocomplete,
 }: {
-  queryLength: number;
+  query: string;
   autocomplete: string;
 }): ReactElement => {
   return autocomplete ? (
     <div className={"typeahead"}>
-      <span className="hidden">{autocomplete.slice(0, queryLength)}</span>
-      <span>{autocomplete.slice(queryLength)}</span>
+      <span className="hidden">{query}</span>
+      <span>{autocomplete.slice(query.length)}</span>
       <span className={"enter-icon"}> ↵</span>
     </div>
   ) : null;
@@ -51,7 +51,7 @@ const SearchBar = ({
           }
         }}
       />
-      <Typeahead queryLength={query.length} autocomplete={autocomplete} />
+      <Typeahead query={query} autocomplete={autocomplete} />
     </div>
   );
 };

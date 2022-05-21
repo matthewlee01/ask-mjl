@@ -197,7 +197,7 @@ const SearchPanel = ({ trie }): ReactElement => {
   useEffect(() => {
     if (query != undefined) findPost(query, router, setMatchedPost, setRelatedPosts);
     if (query == "") setSubmitting(false);
-    setMatches(searchTrie(query, trie));
+    setMatches(searchTrie(query?.toLowerCase(), trie));
     return operandPing(query, setSimilarPosts);
   }, [query, router, trie]);
   useEffect(() => {
