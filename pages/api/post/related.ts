@@ -6,7 +6,7 @@ export default async function handler(req, res) {
       objectId: query,
       max: 8,
     });
-  const related = relatedResponse.objects.map((group) => {
+  const related = relatedResponse?.objects?.map((group) => {
     const metadata = group.metadata as { title: string, html: string,};
     return {
       question: metadata.title,
