@@ -5,9 +5,9 @@ export default async function handler(req, res) {
   var posts = await prisma.post.findMany();
   posts.map(async (post) => {
     if (!post.operandId) {
-      const group = await operand.createGroup({
-        collectionId: process.env.OPERAND_COLLECTION_ID,
-        kind: "html",
+      const group = await operand.createObject({
+        parentId: process.env.OPERAND_COLLECTION_ID,
+        type: "html",
         metadata: {
           title: post.question,
           html: post.answer,

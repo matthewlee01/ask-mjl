@@ -2,16 +2,16 @@ import operand from "lib/operand";
 
 export default async function handler(req, res) {
   const { q: query } = req.query;
-  const data = await operand.search({
-    collections: [process.env.OPERAND_COLLECTION_ID],
+  const data = await operand.searchContents({
+    parentIds: [process.env.OPERAND_COLLECTION_ID],
     query: query,
-    limit: 16,
+    max: 16,
     filter: {},
   });
   const response = new Array();
-  data.atoms?.forEach((atom) => {
-    if (!response.find((post) => post.groupId == atom.groupId)) {
-      const post = data.groups[atom.groupId];
+  data.contents.forEach((atom) => {
+    if (!response.find((post) => post.groupId == atom.objectId)) {
+      const post = data.objects[atom.objectId];
       let metadata = post.metadata as { html: string; title?: string };
       response.push({
         question: metadata.title,

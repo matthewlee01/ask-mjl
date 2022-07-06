@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@operandinc/sdk": "^1.2.8",
+    "@operandinc/sdk": "3.0.20",
     "@prisma/client": "^3.12.0",
     "@tiptap/extension-link": "^2.0.0-beta.37",
     "@tiptap/react": "^2.0.0-beta.108",

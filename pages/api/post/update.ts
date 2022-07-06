@@ -13,17 +13,29 @@ export default async function handler(req, res) {
   });
   if (post.operandId) {
     console.log(`[operand] updating group: ${post.operandId}`);
-    operand.updateGroup(post.operandId, {
-      kind: "html",
+    await operand.deleteObject({
+      id: post.operandId
+    });
+    const object = await operand.createObject({
+      parentId: process.env.OPERAND_COLLECTION_ID, 
+      type: "html",
       metadata: {
         title: post.question,
         html: post.answer ? post.answer : post.question,
       },
     });
+    await prisma.post.update({
+      where: {
+        id: post.id,
+      },
+      data: {
+        operandId: object.id,
+      },
+    });
   } else {
-    const group = await operand.createGroup({
-      kind: "html",
-      collectionId: process.env.OPERAND_COLLECTION_ID,
+    const group = await operand.createObject({
+      type: "html",
+      parentId: process.env.OPERAND_COLLECTION_ID,
       metadata: {
         title: post.question,
         html: post.answer,

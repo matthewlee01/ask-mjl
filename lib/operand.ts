@@ -1,4 +1,4 @@
-import operand, { Operand } from '@operandinc/sdk'
+import operand, { OperandV3 } from '@operandinc/sdk'
 
-let client = new Operand(process.env.OPERAND_API_KEY, "https://core.operand.ai")
+let client = new OperandV3(process.env.OPERAND_API_KEY, "https://prod.operand.ai")
 export default client
