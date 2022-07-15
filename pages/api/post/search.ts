@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     filter: {},
   });
   const response = new Array();
-  data.contents.forEach((atom) => {
+  data?.contents?.forEach((atom) => {
     if (!response.find((post) => post.groupId == atom.objectId)) {
       const post = data.objects[atom.objectId];
       let metadata = post.metadata as { html: string; title?: string };

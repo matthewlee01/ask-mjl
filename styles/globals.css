@@ -191,6 +191,12 @@ input {
   overflow: hidden;
 }
 
+@media (max-width: 600px) {
+  .search-container {
+    width: 100%;
+  }
+}
+
 .enter-icon {
   color: #8ec07c;
   font-size: 80%;

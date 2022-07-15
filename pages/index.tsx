@@ -56,6 +56,15 @@ const Home: React.FC<Props> = (props) => {
           height: 75%;
           width: 30%;
         }
+
+        @media (max-width: 600px) {
+          .searchPanel {
+            width: 100%;
+          }
+
+          .handPanel {
+            width: 0%;
+          }
       `}</style>
     </Layout>
   );
