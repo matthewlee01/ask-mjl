@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   await prisma.post.create({
     data: {
       question: question,
-      askerEmail: email,
+      askerEmail: email == "" ? null : email,
     },
   });
   res.status(200).json({ question: question });
